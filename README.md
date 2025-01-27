@@ -33,4 +33,4 @@ The repository includes example branches:
 
 When using this template, you can either:
 1. Keep the branch structure and delete the example content
-2. Start fresh with just the main and develop branches
+2. Start fresh with just the master and develop branches
