@@ -1,36 +1,29 @@
-# MERN Stack Template
+# To-Do List MERN App
 
-A production-ready template for building full-stack applications with MongoDB, Express.js, React, and Node.js.
+A full-stack to-do list application built with MongoDB, Express.js, React, and Node.js.
 
-## Features
-- 🔒 Security best practices with helmet
-- 📝 API validation with express-validator
-- 🔄 State management ready
-- 🎨 Basic styling setup
-- 🚀 Development and production configurations
-
-## Quick Start
-1. Click "Use this template" on GitHub
-2. Clone your new repository
-3. Follow the setup checklist in `.github/TEMPLATE_CHECKLIST.md`
+## Features (Planned)
+- ✅ Create, read, update, and delete tasks
+- 📝 Task categories and priorities
+- 🔒 User authentication
+- 🎨 Clean and responsive UI
+- 🚀 Real-time updates
 
 ## Development Setup
-[Development instructions...]
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   cd client && npm install
+   cd ../server && npm install
+   ```
+3. Start development servers:
+   ```bash
+   # Terminal 1 - Client
+   cd client && npm run dev
+   
+   # Terminal 2 - Server
+   cd server && npm run dev
+   ```
 
-## Production Setup
-[Production instructions...]
-
-## Best Practices
-[Coding standards, git workflow, etc...]
-
-# Branch Strategy
-This template comes with a pre-configured branch strategy. See `.github/BRANCH_STRATEGY.md` for details.
-
-The repository includes example branches:
-- `feature/example`
-- `bugfix/example`
-- `release/example`
-
-When using this template, you can either:
-1. Keep the branch structure and delete the example content
-2. Start fresh with just the main and develop branches
+## Branch Strategy
+This project follows GitFlow. See `.github/BRANCH_STRATEGY.md` for details.
