@@ -4,8 +4,8 @@ This repository follows a modified GitFlow workflow:
 
 ## Main Branches
 
-- `main` - Production-ready code
-- `develop` - Main development branch
+- `master` - Production-ready code
+- `develop` - Master development branch
 
 ## Supporting Branches
 
@@ -24,14 +24,14 @@ This repository follows a modified GitFlow workflow:
 ### Release Branches
 - Purpose: Release preparation
 - Branch from: `develop`
-- Merge into: `main` and `develop`
+- Merge into: `master` and `develop`
 - Naming: `release/version-number`
 
 ## Branch Protection Rules
 
 Set up these branch protection rules in GitHub:
 
-1. `main` branch:
+1. `master` branch:
    - Require pull request reviews
    - Require status checks to pass
    - No direct pushes
@@ -48,4 +48,4 @@ Set up these branch protection rules in GitHub:
 3. Create PR to merge into `develop`
 4. After review and testing, merge into `develop`
 5. Create release branch when ready
-6. After final testing, merge release into `main` and `develop` 
+6. After final testing, merge release into `master` and `develop` 
