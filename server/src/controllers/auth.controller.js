@@ -2,6 +2,18 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user.model');
 
+const generateToken = (user) => {
+  return jwt.sign(
+    { 
+      userId: user._id,
+      role: user.role,
+      email: user.email 
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: '24h' }
+  );
+};
+
 const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -13,21 +25,33 @@ const register = async (req, res) => {
     const user = new User({
       username,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      role: 'user' // default role
     });
     
     await user.save();
     
     // Generate token
-    const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' }
-    );
+    const token = generateToken(user);
     
-    res.status(201).json({ token });
+    res.status(201).json({
+      status: 'success',
+      data: {
+        user: {
+          id: user._id,
+          username: user.username,
+          email: user.email,
+          role: user.role
+        },
+        token,
+        expiresIn: '24h'
+      }
+    });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({
+      status: 'error',
+      message: error.message
+    });
   }
 };
 
@@ -38,25 +62,42 @@ const login = async (req, res) => {
     // Find user
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({
+        status: 'error',
+        message: 'Invalid credentials'
+      });
     }
     
     // Check password
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({
+        status: 'error',
+        message: 'Invalid credentials'
+      });
     }
     
     // Generate token
-    const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET || 'your-secret-key',
-      { expiresIn: '24h' }
-    );
+    const token = generateToken(user);
     
-    res.json({ token });
+    res.json({
+      status: 'success',
+      data: {
+        user: {
+          id: user._id,
+          username: user.username,
+          email: user.email,
+          role: user.role
+        },
+        token,
+        expiresIn: '24h'
+      }
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      status: 'error',
+      message: error.message
+    });
   }
 };
 
