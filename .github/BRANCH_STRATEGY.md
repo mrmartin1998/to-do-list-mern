@@ -49,3 +49,26 @@ Set up these branch protection rules in GitHub:
 4. After review and testing, merge into `develop`
 5. Create release branch when ready
 6. After final testing, merge release into `master` and `develop` 
+
+## Workflow checklist
+
+1. Starting a Feature:
+   - [ ] Be on develop branch: `git checkout develop`
+   - [ ] Pull latest changes: `git pull origin develop`
+   - [ ] Create feature branch: `git checkout -b feature/name`
+
+2. Working on Feature:
+   - [ ] Make changes
+   - [ ] Commit changes
+   - [ ] Push to remote: `git push origin feature/name`
+
+3. Creating PR:
+   - [ ] Create PR on GitHub
+   - [ ] ⚠️ VERIFY target is `develop` branch
+   - [ ] Add proper description and link to issue (#number)
+
+4. After PR Merge:
+   - [ ] Switch to develop: `git checkout develop`
+   - [ ] Pull latest: `git pull origin develop`
+   - [ ] Delete local feature branch: `git branch -d feature/name`
+   - [ ] Verify remote branch was deleted (should happen automatically)
