@@ -72,3 +72,11 @@ Set up these branch protection rules in GitHub:
    - [ ] Pull latest: `git pull origin develop`
    - [ ] Delete local feature branch: `git branch -d feature/name`
    - [ ] Verify remote branch was deleted (should happen automatically)
+   - [ ] git fetch prune
+
+5. Check that master is up to date:
+   - [ ] git checkout master
+   - [ ] git pull origin master
+   - [ ] git merge develop
+   - [ ] git push origin master
+
