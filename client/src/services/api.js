@@ -9,7 +9,7 @@ export const userService = {
   },
 
   // Create user
-  createUser: async (userData) => {
+  registerUser: async (userData) => {
     const response = await fetch(`${API_URL}/users`, {
       method: 'POST',
       headers: {
