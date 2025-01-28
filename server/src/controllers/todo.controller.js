@@ -58,7 +58,68 @@ const createTodo = async (req, res) => {
   }
 };
 
+const updateTodo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+    
+    // Validate allowed update fields
+    const allowedUpdates = ['title', 'description', 'status'];
+    const updateFields = Object.keys(updates);
+    const isValidOperation = updateFields.every(field => allowedUpdates.includes(field));
+    
+    if (!isValidOperation) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Invalid updates'
+      });
+    }
+    
+    // Find todo and verify ownership
+    const todo = await Todo.findOne({ _id: id, userId: req.user._id });
+    
+    if (!todo) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Todo not found'
+      });
+    }
+    
+    // Apply updates
+    updateFields.forEach(field => todo[field] = updates[field]);
+    await todo.save();
+    
+    res.json({
+      status: 'success',
+      data: {
+        todo
+      }
+    });
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Invalid todo data',
+        errors: Object.values(error.errors).map(err => err.message)
+      });
+    }
+    
+    if (error.name === 'CastError') {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Invalid todo ID'
+      });
+    }
+    
+    res.status(500).json({
+      status: 'error',
+      message: 'Error updating todo'
+    });
+  }
+};
+
 module.exports = {
   getTodos,
-  createTodo
+  createTodo,
+  updateTodo
 }; 
