@@ -118,8 +118,48 @@ const updateTodo = async (req, res) => {
   }
 };
 
+const deleteTodo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Find todo and verify ownership in one query
+    const todo = await Todo.findOne({ 
+      _id: id, 
+      userId: req.user._id 
+    });
+    
+    if (!todo) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Todo not found'
+      });
+    }
+    
+    // Delete the todo
+    await todo.deleteOne();
+    
+    res.json({
+      status: 'success',
+      message: 'Todo deleted successfully'
+    });
+  } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Invalid todo ID'
+      });
+    }
+    
+    res.status(500).json({
+      status: 'error',
+      message: 'Error deleting todo'
+    });
+  }
+};
+
 module.exports = {
   getTodos,
   createTodo,
-  updateTodo
+  updateTodo,
+  deleteTodo
 }; 
