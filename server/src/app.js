@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const connectDB = require('./config/db');
 require('dotenv').config();
 const userRoutes = require('./routes/user.routes');
+const todoRoutes = require('./routes/todo.routes');
 
 const app = express();
 
@@ -25,7 +26,8 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/api/users', userRoutes);  // Routes to correct handler
+app.use('/api/users', userRoutes);
+app.use('/api/todos', todoRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
