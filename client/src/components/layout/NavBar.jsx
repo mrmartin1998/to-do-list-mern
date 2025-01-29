@@ -1,51 +1,80 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
+import UserMenu from './UserMenu';
+import MobileNav from './MobileNav';
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const { user, logout } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+  const isActiveRoute = (path) => {
+    return location.pathname === path;
   };
 
-  const closeMenu = () => {
-    setIsMenuOpen(false);
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
   };
+
+  const navLinks = [
+    { path: '/', label: 'Home' },
+    { path: '/about', label: 'About' },
+    ...(user ? [
+      { path: '/dashboard', label: 'Dashboard' },
+      { path: '/todos', label: 'Todos' }
+    ] : [])
+  ];
 
   return (
     <div className="sticky top-0 z-50">
       <div className="navbar bg-base-100 shadow-lg backdrop-blur-lg bg-opacity-90">
         <div className="navbar-start">
-          <div className="dropdown">
-            <div 
-              tabIndex={0} 
-              role="button" 
-              className="btn btn-ghost lg:hidden"
-              onClick={toggleMenu}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
-              </svg>
-            </div>
-            <ul 
-              tabIndex={0} 
-              className={`menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 ${isMenuOpen ? 'block' : 'hidden'}`}
-            >
-              <li onClick={closeMenu}><Link to="/">Home</Link></li>
-              <li onClick={closeMenu}><Link to="/about">About</Link></li>
-            </ul>
-          </div>
-          <Link to="/" className="btn btn-ghost text-xl">MERN App</Link>
+          <MobileNav 
+            isOpen={isMenuOpen} 
+            onClose={() => setIsMenuOpen(false)}
+            navLinks={navLinks}
+            user={user}
+            onLogout={handleLogout}
+          />
+          
+          <Link to="/" className="btn btn-ghost text-xl">
+            MERN App
+          </Link>
         </div>
+
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/about">About</Link></li>
+            {navLinks.map(({ path, label }) => (
+              <li key={path}>
+                <Link
+                  to={path}
+                  className={`${isActiveRoute(path) ? 'active' : ''}`}
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
-        <div className="navbar-end">
+
+        <div className="navbar-end gap-2">
           <ThemeSwitcher />
+          {user ? (
+            <UserMenu user={user} onLogout={handleLogout} />
+          ) : (
+            <div className="hidden lg:flex gap-2">
+              <Link to="/login" className="btn btn-ghost">
+                Login
+              </Link>
+              <Link to="/register" className="btn btn-primary">
+                Register
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
