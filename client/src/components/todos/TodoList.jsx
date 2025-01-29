@@ -5,12 +5,14 @@ import TodoSkeleton from './TodoSkeleton';
 import TodoEmpty from './TodoEmpty';
 import TodoError from './TodoError';
 import CreateTodo from './CreateTodo';
+import { useToast } from '@/contexts/ToastContext';
 
 const TodoList = () => {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const { showToast } = useToast();
 
   const fetchTodos = async () => {
     try {
@@ -37,6 +39,15 @@ const TodoList = () => {
     setShowCreateForm(true);
   };
 
+  const handleCreateSuccess = () => {
+    fetchTodos();
+    setShowCreateForm(false);
+    showToast({ 
+      message: 'Todo created successfully!',
+      type: 'success'
+    });
+  };
+
   if (loading) return <TodoSkeleton />;
   if (error) return <TodoError message={error} onRetry={fetchTodos} />;
   if (todos.length === 0 && !showCreateForm) {
@@ -46,12 +57,7 @@ const TodoList = () => {
   return (
     <div className="space-y-8">
       {showCreateForm ? (
-        <CreateTodo
-          onTodoCreated={() => {
-            fetchTodos();
-            setShowCreateForm(false);
-          }}
-        />
+        <CreateTodo onTodoCreated={handleCreateSuccess} />
       ) : (
         <div className="text-right">
           <button onClick={handleCreateClick} className="btn btn-primary">
