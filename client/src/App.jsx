@@ -8,6 +8,7 @@ import HomePage from '@/pages/home/page';
 import AboutPage from '@/pages/about/page';
 import LoginUser from '@/components/users/LoginUser';
 import RegisterUser from '@/components/users/RegisterUser';
+import TodoList from '@/components/todos/TodoList';
 
 function App() {
   return (
@@ -25,6 +26,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <div>Dashboard Page</div>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/todos" 
+              element={
+                <ProtectedRoute>
+                  <TodoList />
                 </ProtectedRoute>
               } 
             />
