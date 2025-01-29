@@ -1,51 +1,48 @@
 import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
-import ProtectedRoute from '@/components/auth/ProtectedRoute';
-import './index.css'
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
+import { ToastProvider } from '@/contexts/ToastContext';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
+import RootLayout from '@/layouts/RootLayout';
+import AuthLayout from '@/layouts/AuthLayout';
+import DashboardLayout from '@/layouts/DashboardLayout';
 import HomePage from '@/pages/home/page';
 import AboutPage from '@/pages/about/page';
 import LoginUser from '@/components/users/LoginUser';
 import RegisterUser from '@/components/users/RegisterUser';
 import TodoList from '@/components/todos/TodoList';
-import { ToastProvider } from '@/contexts/ToastContext';
+import NotFoundPage from '@/pages/error/not-found';
 
 function App() {
   return (
-    <AuthProvider>
-      <ToastProvider>
-        <div className="min-h-screen">
-          <Navbar />
-          <main className="container mx-auto px-4 py-8">
-            <Routes>
+    <ErrorBoundary>
+      <AuthProvider>
+        <ToastProvider>
+          <Routes>
+            <Route element={<RootLayout />}>
+              {/* Public routes */}
               <Route path="/" element={<HomePage />} />
               <Route path="/about" element={<AboutPage />} />
-              <Route path="/login" element={<LoginUser />} />
-              <Route path="/register" element={<RegisterUser />} />
-              <Route 
-                path="/dashboard" 
-                element={
-                  <ProtectedRoute>
-                    <div>Dashboard Page</div>
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/todos" 
-                element={
-                  <ProtectedRoute>
-                    <TodoList />
-                  </ProtectedRoute>
-                } 
-              />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </ToastProvider>
-    </AuthProvider>
-  )
+
+              {/* Auth routes */}
+              <Route element={<AuthLayout />}>
+                <Route path="/login" element={<LoginUser />} />
+                <Route path="/register" element={<RegisterUser />} />
+              </Route>
+
+              {/* Protected routes */}
+              <Route element={<DashboardLayout />}>
+                <Route path="/dashboard" element={<TodoList />} />
+                <Route path="/todos" element={<TodoList />} />
+              </Route>
+
+              {/* 404 route */}
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+          </Routes>
+        </ToastProvider>
+      </AuthProvider>
+    </ErrorBoundary>
+  );
 }
 
 export default App;
