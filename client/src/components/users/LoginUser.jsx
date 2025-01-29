@@ -1,10 +1,13 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { userService } from '@/services/api';
+import { useAuth } from '@/contexts/AuthContext';
 
 const LoginUser = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
   const { 
     register, 
     handleSubmit, 
@@ -18,8 +21,10 @@ const LoginUser = () => {
       const response = await userService.signIn(data);
       
       if (response.status === 'success') {
-        localStorage.setItem('token', response.data.token);
-        navigate('/dashboard');
+        login(response.data.user, response.data.token);
+        // Redirect to the page they tried to visit or dashboard
+        const from = location.state?.from?.pathname || '/dashboard';
+        navigate(from);
       } else {
         setApiError(response.message || 'Login failed');
       }

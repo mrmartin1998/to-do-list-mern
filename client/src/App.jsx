@@ -1,26 +1,38 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+import { AuthProvider } from '@/contexts/AuthContext';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import './index.css'
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import HomePage from '@/pages/home/page';
 import AboutPage from '@/pages/about/page';
-import UsersPage from '@/pages/users/page';
+import LoginUser from '@/components/users/LoginUser';
+import RegisterUser from '@/components/users/RegisterUser';
 
 function App() {
   return (
-    <Router>
+    <AuthProvider>
       <div className="min-h-screen">
         <Navbar />
         <main className="container mx-auto px-4 py-8">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/users" element={<UsersPage />} />
+            <Route path="/login" element={<LoginUser />} />
+            <Route path="/register" element={<RegisterUser />} />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <div>Dashboard Page</div>
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
         </main>
         <Footer />
       </div>
-    </Router>
+    </AuthProvider>
   )
 }
 

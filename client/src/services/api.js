@@ -1,3 +1,5 @@
+import AuthService from './auth.service';
+
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const API_URL = `${BASE_URL}/api`;
 
@@ -22,13 +24,32 @@ export const userService = {
 
   // Sign in
   signIn: async (credentials) => {
-    const response = await fetch(`${API_URL}/users/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials)
-    });
-    return response.json();
+    try {
+      const response = await fetch('/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials)
+      });
+      return response.json();
+    } catch (error) {
+      throw new Error('Login failed');
+    }
+  },
+
+  async createUser(data) {
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return response.json();
+    } catch (error) {
+      throw new Error('Registration failed');
+    }
   }
 }; 
