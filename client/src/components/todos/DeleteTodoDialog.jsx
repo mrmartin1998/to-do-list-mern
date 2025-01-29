@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import Modal from '@/components/common/Modal';
 import { todoService } from '@/services/todo.service';
+import { useToast } from '@/contexts/ToastContext';
 
 const DeleteTodoDialog = ({ todo, isOpen, onClose, onDelete }) => {
+  const { showToast } = useToast();
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState('');
 
@@ -15,6 +17,10 @@ const DeleteTodoDialog = ({ todo, isOpen, onClose, onDelete }) => {
       if (response.status === 'success') {
         onDelete();
         onClose();
+        showToast({
+          message: 'Todo deleted successfully!',
+          type: 'success'
+        });
       } else {
         setError(response.message || 'Failed to delete todo');
       }

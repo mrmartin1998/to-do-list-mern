@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { todoService } from '@/services/todo.service';
 import EditTodoForm from './EditTodoForm';
 import DeleteTodoDialog from './DeleteTodoDialog';
+import { useToast } from '@/contexts/ToastContext';
 
 const TodoItem = ({ todo, onUpdate, onDelete }) => {
+  const { showToast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -13,8 +15,16 @@ const TodoItem = ({ todo, onUpdate, onDelete }) => {
         status: todo.status === 'completed' ? 'pending' : 'completed'
       });
       onUpdate();
+      showToast({ 
+        message: 'Todo status updated successfully!',
+        type: 'success'
+      });
     } catch (error) {
       console.error('Failed to update todo:', error);
+      showToast({
+        message: 'Failed to update todo status',
+        type: 'error'
+      });
     }
   };
 
