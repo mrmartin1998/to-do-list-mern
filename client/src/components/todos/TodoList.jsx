@@ -4,11 +4,13 @@ import TodoItem from './TodoItem';
 import TodoSkeleton from './TodoSkeleton';
 import TodoEmpty from './TodoEmpty';
 import TodoError from './TodoError';
+import CreateTodo from './CreateTodo';
 
 const TodoList = () => {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showCreateForm, setShowCreateForm] = useState(false);
 
   const fetchTodos = async () => {
     try {
@@ -31,20 +33,43 @@ const TodoList = () => {
     fetchTodos();
   }, []);
 
+  const handleCreateClick = () => {
+    setShowCreateForm(true);
+  };
+
   if (loading) return <TodoSkeleton />;
   if (error) return <TodoError message={error} onRetry={fetchTodos} />;
-  if (todos.length === 0) return <TodoEmpty />;
+  if (todos.length === 0 && !showCreateForm) {
+    return <TodoEmpty onCreateClick={handleCreateClick} />;
+  }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {todos.map((todo) => (
-        <TodoItem
-          key={todo._id}
-          todo={todo}
-          onUpdate={fetchTodos}
-          onDelete={fetchTodos}
+    <div className="space-y-8">
+      {showCreateForm ? (
+        <CreateTodo
+          onTodoCreated={() => {
+            fetchTodos();
+            setShowCreateForm(false);
+          }}
         />
-      ))}
+      ) : (
+        <div className="text-right">
+          <button onClick={handleCreateClick} className="btn btn-primary">
+            Create New Todo
+          </button>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {todos.map((todo) => (
+          <TodoItem
+            key={todo._id}
+            todo={todo}
+            onUpdate={fetchTodos}
+            onDelete={fetchTodos}
+          />
+        ))}
+      </div>
     </div>
   );
 };
