@@ -12,6 +12,7 @@ import RegisterUser from '@/components/users/RegisterUser';
 import TodoList from '@/components/todos/TodoList';
 import NotFoundPage from '@/pages/error/not-found';
 import LoginPage from '@/pages/auth/login';
+import RegisterPage from '@/pages/auth/register';
 
 function App() {
   return (
@@ -27,7 +28,7 @@ function App() {
               {/* Auth routes */}
               <Route element={<AuthLayout />}>
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterUser />} />
+                <Route path="/register" element={<RegisterPage />} />
               </Route>
 
               {/* Protected routes */}
