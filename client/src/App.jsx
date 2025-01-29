@@ -13,6 +13,7 @@ import TodoList from '@/components/todos/TodoList';
 import NotFoundPage from '@/pages/error/not-found';
 import LoginPage from '@/pages/auth/login';
 import RegisterPage from '@/pages/auth/register';
+import DashboardPage from '@/pages/dashboard';
 
 function App() {
   return (
@@ -33,7 +34,7 @@ function App() {
 
               {/* Protected routes */}
               <Route element={<DashboardLayout />}>
-                <Route path="/dashboard" element={<TodoList />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/todos" element={<TodoList />} />
               </Route>
 
