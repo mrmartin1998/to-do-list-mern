@@ -31,7 +31,7 @@ const createTodo = async (req, res) => {
       title,
       description,
       status,
-      userId: req.user._id  // From auth middleware
+      userId: req.userId  // Changed from req.user._id to req.userId
     });
     
     await todo.save();
@@ -76,7 +76,7 @@ const updateTodo = async (req, res) => {
     }
     
     // Find todo and verify ownership
-    const todo = await Todo.findOne({ _id: id, userId: req.user._id });
+    const todo = await Todo.findOne({ _id: id, userId: req.userId });
     
     if (!todo) {
       return res.status(404).json({
@@ -125,7 +125,7 @@ const deleteTodo = async (req, res) => {
     // Find todo and verify ownership in one query
     const todo = await Todo.findOne({ 
       _id: id, 
-      userId: req.user._id 
+      userId: req.userId  // Changed from req.user._id
     });
     
     if (!todo) {

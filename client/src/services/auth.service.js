@@ -2,8 +2,21 @@ const TOKEN_KEY = 'token';
 const USER_KEY = 'user';
 
 class AuthService {
+  static setToken(token) {
+    localStorage.setItem(TOKEN_KEY, token);
+  }
+
+  static setUser(user) {
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+  }
+
   static getToken() {
     return localStorage.getItem(TOKEN_KEY);
+  }
+
+  static getUser() {
+    const user = localStorage.getItem(USER_KEY);
+    return user ? JSON.parse(user) : null;
   }
 
   static isTokenValid(token) {
@@ -35,6 +48,20 @@ class AuthService {
     } catch {
       logout();
     }
+  }
+
+  static login(response) {
+    if (response.status === 'success' && response.data) {
+      this.setToken(response.data.token);
+      this.setUser(response.data.user);
+      return true;
+    }
+    return false;
+  }
+
+  static logout() {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
   }
 }
 
