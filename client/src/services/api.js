@@ -20,7 +20,11 @@ export const userService = {
         },
         body: JSON.stringify(userData),
       });
-      return response.json();
+      const data = await response.json();
+      if (data.status === 'success') {
+        AuthService.login(data);
+      }
+      return data;
     } catch (error) {
       throw new Error('Registration failed');
     }
@@ -36,13 +40,17 @@ export const userService = {
         },
         body: JSON.stringify(credentials)
       });
-      return response.json();
+      const data = await response.json();
+      if (data.status === 'success') {
+        AuthService.login(data);
+      }
+      return data;
     } catch (error) {
       throw new Error('Login failed');
     }
   },
 
-  // Add this new method
+  // Check username availability
   checkUsername: async (username) => {
     try {
       const response = await fetch(`${API_URL}/users/check-username/${username}`);
