@@ -6,17 +6,28 @@ import { todoValidation } from '@/utils/formValidation';
 const CreateTodo = ({ onTodoCreated }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState('');
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({
+    defaultValues: {
+      status: false
+    }
+  });
 
   const onSubmit = async (data) => {
     try {
       setIsSubmitting(true);
       setApiError('');
-      const response = await todoService.createTodo(data);
+      
+      // Ensure status is set properly
+      const todoData = {
+        ...data,
+        status: data.status ? 'completed' : 'pending'
+      };
+
+      const response = await todoService.createTodo(todoData);
       
       if (response.status === 'success') {
-        reset(); // Reset form
-        onTodoCreated(); // Refresh todo list
+        reset();
+        onTodoCreated();
       } else {
         setApiError(response.message || 'Failed to create todo');
       }
@@ -81,10 +92,7 @@ const CreateTodo = ({ onTodoCreated }) => {
                 type="checkbox"
                 className="checkbox"
                 {...register('status')}
-                onChange={(e) => {
-                  register('status').onChange(e);
-                  e.target.value = e.target.checked ? 'completed' : 'pending';
-                }}
+                defaultChecked={false}
               />
             </label>
           </div>
