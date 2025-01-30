@@ -11,21 +11,25 @@ export const userService = {
   },
 
   // Create user
-  registerUser: async (userData) => {
-    const response = await fetch(`${API_URL}/users`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData)
-    });
-    return response.json();
+  createUser: async (userData) => {
+    try {
+      const response = await fetch(`${API_URL}/users`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+      return response.json();
+    } catch (error) {
+      throw new Error('Registration failed');
+    }
   },
 
   // Sign in
   signIn: async (credentials) => {
     try {
-      const response = await fetch('/api/users/login', {
+      const response = await fetch(`${API_URL}/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,21 +39,6 @@ export const userService = {
       return response.json();
     } catch (error) {
       throw new Error('Login failed');
-    }
-  },
-
-  async createUser(data) {
-    try {
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      return response.json();
-    } catch (error) {
-      throw new Error('Registration failed');
     }
   },
 

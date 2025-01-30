@@ -29,9 +29,24 @@ router.post('/', async (req, res) => {
     });
     
     await user.save();
-    res.status(201).json(user);
+    
+    // Return consistent response format
+    res.status(201).json({
+      status: 'success',
+      message: 'User registered successfully',
+      data: {
+        user: {
+          id: user._id,
+          username: user.username,
+          email: user.email
+        }
+      }
+    });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ 
+      status: 'error',
+      message: error.message 
+    });
   }
 });
 
