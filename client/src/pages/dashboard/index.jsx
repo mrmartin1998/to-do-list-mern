@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import TodoList from '@/components/todos/TodoList';
 import TodoFilter from '@/components/todos/TodoFilter';
-import TodoToolbar from '@/components/todos/TodoToolbar';
 
 const DashboardPage = () => {
   const [filters, setFilters] = useState({
@@ -22,13 +21,10 @@ const DashboardPage = () => {
       </div>
 
       <div className="grid gap-6">
-        <div className="flex flex-col md:flex-row justify-between gap-4">
-          <TodoFilter 
-            filters={filters} 
-            onFilterChange={handleFilterChange} 
-          />
-          <TodoToolbar />
-        </div>
+        <TodoFilter 
+          filters={filters} 
+          onFilterChange={handleFilterChange} 
+        />
 
         <TodoList filters={filters} />
       </div>
