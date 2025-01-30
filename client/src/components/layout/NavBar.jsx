@@ -22,16 +22,16 @@ const Navbar = () => {
 
   const navLinks = [
     { path: '/', label: 'Home' },
-    { path: '/about', label: 'About' },
     ...(user ? [
       { path: '/dashboard', label: 'Dashboard' },
-      { path: '/todos', label: 'Todos' }
-    ] : [])
+      { path: '/todos', label: 'Todos' },
+    ] : []),
+    { path: '/about', label: 'About' }
   ];
 
   return (
     <div className="sticky top-0 z-50">
-      <div className="navbar bg-base-100 shadow-lg backdrop-blur-lg bg-opacity-90">
+      <div className="navbar bg-base-200">
         <div className="navbar-start">
           <MobileNav 
             isOpen={isMenuOpen} 
@@ -42,7 +42,7 @@ const Navbar = () => {
           />
           
           <Link to="/" className="btn btn-ghost text-xl">
-            MERN App
+            Todo-MERN
           </Link>
         </div>
 
