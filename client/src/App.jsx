@@ -7,8 +7,6 @@ import AuthLayout from '@/layouts/AuthLayout';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import HomePage from '@/pages/home/page';
 import AboutPage from '@/pages/about/page';
-import LoginUser from '@/components/users/LoginUser';
-import RegisterUser from '@/components/users/RegisterUser';
 import TodoList from '@/components/todos/TodoList';
 import NotFoundPage from '@/pages/error/not-found';
 import LoginPage from '@/pages/auth/login';
