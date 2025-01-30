@@ -24,14 +24,14 @@ const getTodos = async (req, res) => {
 
 const createTodo = async (req, res) => {
   try {
-    const { title, description, status = 'pending' } = req.body;
+    const { title, description, status } = req.body;
     
-    // Create new todo with user association
+    // Create new todo with user association and explicit default status
     const todo = new Todo({
       title,
       description,
-      status,
-      userId: req.userId  // Changed from req.user._id to req.userId
+      status: status === 'completed' ? 'completed' : 'pending', // This ensures pending is default
+      userId: req.userId
     });
     
     await todo.save();
