@@ -51,5 +51,15 @@ export const userService = {
     } catch (error) {
       throw new Error('Registration failed');
     }
+  },
+
+  // Add this new method
+  checkUsername: async (username) => {
+    try {
+      const response = await fetch(`${API_URL}/users/check-username/${username}`);
+      return response.json();
+    } catch (error) {
+      throw new Error('Error checking username availability');
+    }
   }
 }; 

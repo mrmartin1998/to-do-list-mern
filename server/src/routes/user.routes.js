@@ -51,4 +51,22 @@ router.get('/:id', async (req, res) => {
 // Add this new route
 router.post('/login', login);
 
+// Add this route after the existing routes
+router.get('/check-username/:username', async (req, res) => {
+  try {
+    const { username } = req.params;
+    const existingUser = await User.findOne({ username });
+    
+    res.json({
+      status: 'success',
+      available: !existingUser
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Error checking username availability'
+    });
+  }
+});
+
 module.exports = router; 
